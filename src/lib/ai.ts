@@ -1,7 +1,13 @@
 /**
- * Server-only. AI text generation with fallback chain: Gemini → Groq → OpenRouter.
+ * lib/ai.ts — non-streaming AI text (Server / Route Handlers only)
+ *
+ * Walkthrough:
+ * - `generateWithAI` tries providers in order until one returns text (see env keys in README).
+ * - Used when streaming isn’t available or as fallback from `/api/ai/*` routes.
+ * - Each `try*` helper is isolated: missing key → null, HTTP error → null, empty text → null.
  */
 
+/** Google Generative Language API — JSON response, extract first candidate text part. */
 async function tryGemini(prompt: string): Promise<string | null> {
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
   if (!apiKey) return null;
@@ -22,6 +28,7 @@ async function tryGemini(prompt: string): Promise<string | null> {
   return typeof text === "string" && text.length > 0 ? text : null;
 }
 
+/** Groq OpenAI-compatible chat completions (fast Llama). */
 async function tryGroq(prompt: string): Promise<string | null> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return null;
@@ -46,6 +53,7 @@ async function tryGroq(prompt: string): Promise<string | null> {
   return typeof text === "string" && text.length > 0 ? text : null;
 }
 
+/** OpenRouter aggregates many models; here uses a free-tier model id. */
 async function tryOpenRouter(prompt: string): Promise<string | null> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;

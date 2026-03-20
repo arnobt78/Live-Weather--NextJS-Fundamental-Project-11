@@ -1,3 +1,4 @@
+/** Small pill label (e.g. units, status chips) matching the sky gradient theme. */
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 

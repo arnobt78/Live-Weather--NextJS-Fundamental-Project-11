@@ -1,3 +1,13 @@
+/**
+ * app/layout.tsx — Root layout (Server Component)
+ *
+ * Walkthrough:
+ * - Defines global `metadata` for SEO (title template, Open Graph, Twitter, author).
+ * - Loads Google fonts as CSS variables for the whole app.
+ * - Reads HTTP cookies on the server to hydrate `WeatherProvider` without navbar hydration mismatches.
+ * - Mounts shell: AppProvider → WeatherProvider → preload + fixed background → Navbar → page `children` → Footer.
+ * - `BackgroundPreload` / `WeatherBackground` use `BG_IMAGE_COOKIE_KEY` so revisits keep the same Unsplash image.
+ */
 import type { Metadata } from "next";
 import { DM_Sans, Lilita_One } from "next/font/google";
 import { cookies } from "next/headers";
@@ -29,11 +39,97 @@ const fontBody = DM_Sans({
   variable: "--font-body",
 });
 
+/** Production / canonical base URL — used for Open Graph, Twitter cards, and absolute asset URLs. */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+  "https://weather-farming.vercel.app";
+
+const defaultTitle =
+  process.env.NEXT_PUBLIC_APP_TITLE ||
+  "AI-Powered Weather & Farming Advisory Dashboard";
+
+const longTitle =
+  "AI-Powered Weather & Farming Advisory Dashboard — Next.js, React, TypeScript, OpenWeather API, Agro API, Tailwind CSS, Framer Motion (Fundamental Project 11)";
+
+const metaDescription =
+  "Search any city for live weather, 5-day forecast, air quality, and AI-powered weather summaries and farming tips. Built with Next.js, OpenWeather API, optional Agro API, Unsplash backgrounds, Tailwind CSS, and Framer Motion. Live demo and learning project by Arnob Mahmud.";
+
+const metaKeywords = [
+  "weather dashboard",
+  "farming advisory",
+  "agriculture weather",
+  "AI weather summary",
+  "farming tips",
+  "OpenWeather API",
+  "Agro API",
+  "Next.js",
+  "React",
+  "TypeScript",
+  "Tailwind CSS",
+  "Framer Motion",
+  "air quality",
+  "weather forecast",
+  "Arnob Mahmud",
+];
+
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_TITLE || "Weather Live",
-  description: "Weather app tutorial project with Next.js and TypeScript.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: `%s | ${defaultTitle}`,
+  },
+  applicationName: defaultTitle,
+  description: metaDescription,
+  keywords: metaKeywords,
+  authors: [
+    {
+      name: "Arnob Mahmud",
+      url: "https://www.arnobmahmud.com",
+    },
+  ],
+  creator: "Arnob Mahmud",
+  publisher: "Arnob Mahmud",
+  category: "weather",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   icons: {
-    icon: "/favicon.ico",
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: defaultTitle,
+    title: longTitle,
+    description: metaDescription,
+    images: [
+      {
+        url: "/images/sunny.png",
+        width: 1280,
+        height: 720,
+        alt: "AI-Powered Weather & Farming Advisory Dashboard — weather illustration",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: longTitle,
+    description: metaDescription,
+    images: [`${siteUrl}/images/sunny.png`],
+  },
+  other: {
+    "author:email": "contact@arnobmahmud.com",
   },
 };
 
@@ -42,7 +138,8 @@ type RootLayoutProps = {
 };
 
 /**
- * Server-rendered root layout. Interactive UI is delegated to client components.
+ * RootLayout — reads cookies once per request, passes into `WeatherProvider`, renders global shell.
+ * `children` is the active route (e.g. home or gallery main column only).
  */
 export default async function RootLayout({ children }: RootLayoutProps) {
   const cookieStore = await cookies();

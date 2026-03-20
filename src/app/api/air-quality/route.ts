@@ -1,3 +1,8 @@
+/**
+ * GET /api/air-quality?lat=&lon= — OpenWeather air pollution proxy
+ *
+ * Returns typed `AirPollutionResponse` for the dashboard AQI section.
+ */
 import { fetchAirPollution } from "@/lib/openweather";
 import { NextRequest, NextResponse } from "next/server";
 

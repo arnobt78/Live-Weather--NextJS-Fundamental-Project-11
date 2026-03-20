@@ -1,3 +1,10 @@
+/**
+ * lib/unsplash.ts — Unsplash Search API wrapper
+ *
+ * Walkthrough:
+ * - Requires `UNSPLASH_ACCESS_KEY` in server env. Returns empty result if missing (graceful degrade).
+ * - Used by `/api/unsplash` route and `getInitialBackgroundUrl` / `WeatherBackground` data loading.
+ */
 import type { UnsplashPhoto, UnsplashSearchResponse } from "@/types/unsplash";
 
 const UNSPLASH_SEARCH = "https://api.unsplash.com/search/photos";

@@ -1,3 +1,4 @@
+/** Rounded full-width text field styled for dark glass backgrounds (navbar search). */
 import { cn } from "@/lib/utils";
 import type { InputHTMLAttributes } from "react";
 

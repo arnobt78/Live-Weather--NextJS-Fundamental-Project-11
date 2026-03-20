@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * GalleryPage — paginated Unsplash grid driven by current weather description keyword
+ *
+ * Uses `currentWeather` from context (set on Home). Resets to page 1 when keyword changes; download uses blob + object URL.
+ */
 import { Card } from "@/Components/ui/card";
 import { ImageDialog } from "@/Components/ui/image-dialog";
 import { Pagination } from "@/Components/ui/pagination";

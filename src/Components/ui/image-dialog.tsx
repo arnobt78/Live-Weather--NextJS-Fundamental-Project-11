@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * ImageDialog — fullscreen Unsplash preview with Escape to close and optional download affordance.
+ */
 import { AnimatePresence, motion } from "framer-motion";
 import { Download, X } from "lucide-react";
 import { useCallback, useEffect } from "react";

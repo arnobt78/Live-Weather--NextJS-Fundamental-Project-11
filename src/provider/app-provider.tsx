@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * AppProvider — tiny global client wrapper
+ *
+ * Walkthrough:
+ * - Wraps the whole app inside `layout.tsx`.
+ * - Disables browser scroll restoration and scrolls to top on mount so navigations feel like a SPA dashboard.
+ * - Extend here for theme providers, analytics, etc., without touching every page.
+ */
 import { useEffect, type ReactNode } from "react";
 
 type AppProviderProps = {

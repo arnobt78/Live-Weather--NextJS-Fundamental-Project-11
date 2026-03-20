@@ -1,3 +1,4 @@
+/** OpenWeather Air Pollution API — component concentrations + 1–5 AQI index per list item. */
 export type AirPollutionComponents = {
   co: number;
   no: number;

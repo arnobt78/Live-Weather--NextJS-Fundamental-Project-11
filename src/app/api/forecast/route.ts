@@ -1,3 +1,8 @@
+/**
+ * GET /api/forecast?lat=&lon= — OpenWeather 5-day/3-hour forecast proxy
+ *
+ * Validates numeric lat/lon; 502 if OpenWeather fails or key missing (see `lib/openweather`).
+ */
 import { fetchForecast } from "@/lib/openweather";
 import { NextRequest, NextResponse } from "next/server";
 

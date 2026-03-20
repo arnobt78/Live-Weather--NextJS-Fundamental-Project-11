@@ -1,3 +1,12 @@
+/**
+ * lib/openweather.ts — server-side OpenWeather helpers
+ *
+ * Walkthrough:
+ * - Used by Server Components (`app/page.tsx`) and Route Handlers (`app/api/*`).
+ * - API key: `OPENWEATHER_API_KEY` preferred (secret); `NEXT_PUBLIC_*` only if you accept client exposure.
+ * - All fetches use `cache: "no-store"` so weather stays fresh (trade-off: more API calls).
+ * - Typed responses live under `src/types/*` — adjust types if OpenWeather payload changes.
+ */
 import type { AirPollutionResponse } from "@/types/air";
 import type { GeoItem } from "@/types/geo";
 import type { ForecastResponse } from "@/types/forecast";
@@ -6,9 +15,11 @@ import type { WeatherApiError, WeatherApiSuccess } from "@/types/weather";
 const OPEN_WEATHER_BASE = "https://api.openweathermap.org";
 
 function getApiKey(): string | undefined {
+  // Server env first keeps keys off the client bundle when only OPENWEATHER_API_KEY is set.
   return process.env.OPENWEATHER_API_KEY ?? process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 }
 
+/** Narrow JSON union: OpenWeather returns 200 + body or error shape with different `cod`. */
 function isWeatherSuccess(value: WeatherApiSuccess | WeatherApiError): value is WeatherApiSuccess {
   return typeof value.cod === "number" && value.cod === 200;
 }

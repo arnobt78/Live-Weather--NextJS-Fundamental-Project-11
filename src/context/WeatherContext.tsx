@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * WeatherContext — global client state for location & saved cities
+ *
+ * Walkthrough:
+ * - `initialCity` / `initialSavedCities` come from cookies (set in RootLayout) so first HTML matches client.
+ * - `loadStored()` reads lat/lon from localStorage for forecast/AQI after hydration (coords aren’t always on cookie).
+ * - Every mutation mirrors to both localStorage and `document.cookie` where needed for SSR on next request.
+ * - `currentWeather` is updated by HomePage when search succeeds — Navbar/gallery can read `weatherDescription`.
+ */
 import {
   CITY_COOKIE_KEY,
   DEFAULT_CITY,
@@ -36,6 +45,7 @@ const MAX_SAVED = 10;
 
 const WeatherContext = createContext<WeatherContextValue | null>(null);
 
+/** Client-only: restore lat/lon for API calls (forecast, air quality) from previous session. */
 function loadStored(): {
   city: string;
   lat: number | null;

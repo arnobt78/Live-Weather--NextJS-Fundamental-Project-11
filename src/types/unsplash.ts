@@ -1,3 +1,4 @@
+/** Subset of Unsplash Search API fields used by gallery and background slideshow. */
 export type UnsplashPhoto = {
   id: string;
   urls: { regular: string; small: string; thumb: string };

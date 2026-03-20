@@ -19,7 +19,8 @@ type Ripple = {
 type RippleButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 /**
- * Reusable ripple button used across the project for click feedback.
+ * RippleButton — captures click coords, spawns expanding circles, cleans up after animation.
+ * Used for primary actions (search, AI triggers) for tactile feedback on glass UI.
  */
 export function RippleButton({
   className,

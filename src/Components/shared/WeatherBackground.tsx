@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * WeatherBackground — full-viewport Unsplash slideshow keyed off live weather
+ *
+ * `initialImageUrl` from layout SSR avoids a blank first paint; after hydration, fetches `/api/unsplash`
+ * when `currentWeather` exists. Two layers crossfade after `new Image()` preload; cookie stores URL for revisits.
+ */
 import { useWeatherContext } from "@/context/WeatherContext";
 import { BG_IMAGE_COOKIE_KEY, WEATHER_UNSPLASH_QUERY } from "@/data/constants";
 import type { UnsplashPhoto } from "@/types/unsplash";

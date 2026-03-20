@@ -1,3 +1,8 @@
+/**
+ * GET /api/unsplash?keyword=&page= — Unsplash search proxy (keeps access key server-side)
+ *
+ * Default keyword `weather`; page is clamped ≥ 1. Gallery and `WeatherBackground` consume this.
+ */
 import { searchUnsplash } from "@/lib/unsplash";
 import { NextRequest, NextResponse } from "next/server";
 

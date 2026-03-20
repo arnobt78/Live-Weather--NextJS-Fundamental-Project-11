@@ -1,3 +1,9 @@
+/**
+ * POST /api/ai/farming-tips — long-form markdown farming advice from full dashboard context
+ *
+ * Body may include weather, air quality, forecast slice, geo — `buildPrompt` assembles the system-style instructions.
+ * Same streaming-then-JSON fallback pattern as summary.
+ */
 import { generateWithAI } from "@/lib/ai";
 import { generateWithAIStream } from "@/lib/ai-stream";
 import { NextRequest, NextResponse } from "next/server";
@@ -58,6 +64,7 @@ const AQI_LABELS: Record<number, string> = {
   5: "Very Poor",
 };
 
+/** Concatenate structured facts + the final “act as advisor” instruction block. */
 function buildPrompt(body: Body): string {
   const { city, weather, airQuality, forecast, geo } = body;
   const parts: string[] = [];

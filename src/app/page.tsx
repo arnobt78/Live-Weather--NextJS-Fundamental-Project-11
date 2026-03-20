@@ -1,3 +1,13 @@
+/**
+ * app/page.tsx — Home route (Server Component)
+ *
+ * Walkthrough:
+ * - Next.js runs this on the server for each request (dynamic route when cookies/search vary).
+ * - City resolution order: URL ?city= → cookie (last searched) → DEFAULT_CITY — so refresh keeps context.
+ * - `fetchWeatherByCity` calls OpenWeather server-side via `lib/openweather` (API key in env, not exposed to browser).
+ * - Fallback: if the chosen city fails but isn’t default, retry DEFAULT_CITY so the page still hydrates.
+ * - `HomePage` is a Client Component: it receives `initialData` as props for first paint, then handles live search.
+ */
 import { HomePage } from "@/Components/pages/home-page";
 import { CITY_COOKIE_KEY, DEFAULT_CITY } from "@/data/constants";
 import { fetchWeatherByCity } from "@/lib/openweather";
@@ -16,6 +26,7 @@ export default async function Page({ searchParams }: PageProps) {
   const requestedCity = resolvedSearchParams?.city?.trim();
   const cookieStore = await cookies();
   const cookieCity = cookieStore.get(CITY_COOKIE_KEY)?.value?.trim();
+  // Prefer explicit search, then persisted cookie, then app default (see README / WeatherContext).
   const initialCity = requestedCity || cookieCity || DEFAULT_CITY;
 
   const initialData =

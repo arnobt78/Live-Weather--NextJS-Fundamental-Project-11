@@ -1,3 +1,8 @@
+/**
+ * POST /api/ai/tts — `{ text }` → audio/mpeg bytes
+ *
+ * ElevenLabs first; on failure uses Edge TTS and sets `X-TTS-Fallback: edge` for debugging.
+ */
 import { textToSpeechEdge, textToSpeechElevenLabs } from "@/lib/tts";
 import { NextRequest, NextResponse } from "next/server";
 

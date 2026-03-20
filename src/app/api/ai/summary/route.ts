@@ -1,3 +1,9 @@
+/**
+ * POST /api/ai/summary — short natural-language weather summary (+ outfit hint)
+ *
+ * Body: `{ city, weather: { temp, humidity, wind, main, description } }`.
+ * Tries streaming first (`text/plain` chunks); if no stream, returns JSON `{ text }`.
+ */
 import { generateWithAI } from "@/lib/ai";
 import { generateWithAIStream } from "@/lib/ai-stream";
 import { NextRequest, NextResponse } from "next/server";

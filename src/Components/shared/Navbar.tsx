@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Navbar — top bar: brand, Home/Gallery links, mobile menu, city search, saved cities
+ *
+ * Search uses `router.push("/?city=...")` so the Server Component home page refetches weather for that city.
+ * Saved cities come from `WeatherContext` (cookie + localStorage synced in provider).
+ */
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";

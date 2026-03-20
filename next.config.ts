@@ -1,3 +1,6 @@
+/**
+ * Next.js config — `images.remotePatterns` allow `next/image` for Unsplash + OpenWeather icon CDN.
+ */
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {

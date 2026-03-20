@@ -1,3 +1,4 @@
+/** Pulse placeholder while weather/AI/remote data is loading. */
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 

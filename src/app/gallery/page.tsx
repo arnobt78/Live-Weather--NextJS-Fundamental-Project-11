@@ -1,3 +1,10 @@
+/**
+ * app/gallery/page.tsx — Gallery route (Server Component shell)
+ *
+ * Walkthrough:
+ * - Renders the client `GalleryPage`, which fetches `/api/unsplash` based on current weather keyword from context.
+ * - Full-screen background + navbar come from `layout.tsx` (same shell as home).
+ */
 import { GalleryPage as GalleryPageClient } from "@/Components/pages/gallery-page";
 
 /**

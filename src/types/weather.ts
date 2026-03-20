@@ -1,3 +1,7 @@
+/**
+ * OpenWeather “current weather” API shapes (`/data/2.5/weather`).
+ * `WeatherApiSuccess` is the happy path; `WeatherApiError` covers string/number `cod` error payloads.
+ */
 export type WeatherKind = "Clear" | "Clouds" | "Rain" | "Snow" | "Haze" | "Mist";
 
 export type WeatherApiSuccess = {

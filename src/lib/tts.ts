@@ -1,5 +1,10 @@
 /**
- * Server-only. TTS: try ElevenLabs first, then Edge TTS (no key).
+ * lib/tts.ts — text-to-speech for `/api/ai/tts`
+ *
+ * Walkthrough:
+ * - Prefer ElevenLabs when `ELEVENLABS_API_KEY` is set (MP3 via REST).
+ * - Fallback: dynamic `import("edge-tts-universal")` so the heavy dep loads only if needed; no API key.
+ * - Text is capped (~5000 chars) to respect provider limits.
  */
 
 const ELEVENLABS_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";

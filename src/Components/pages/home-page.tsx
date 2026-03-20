@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * HomePage — main dashboard (Client Component)
+ *
+ * Walkthrough:
+ * - `initialData` from `app/page.tsx` (SSR) seeds first render; `useWeather` handles user searches and loading UI.
+ * - On successful search, `onSuccess` updates context, persists city, and geocodes for forecast + air-quality API calls.
+ * - AI blocks call `/api/ai/summary` and `/api/ai/farming-tips` (stream preferred). TTS posts to `/api/ai/tts`.
+ * - Helpers: date/compass formatting, `groupForecastByDay`, `renderAiText` for **bold** / bullets in streamed markdown.
+ */
 import { Card } from "@/Components/ui/card";
 import { RippleButton } from "@/Components/ui/ripple-button";
 import { Skeleton } from "@/Components/ui/skeleton";
@@ -140,6 +149,7 @@ function degToCompass(deg: number): string {
   return dirs[Math.round(deg / 22.5) % 16];
 }
 
+/** One representative forecast entry per calendar day (OpenWeather returns 3h steps). */
 function groupForecastByDay(
   list: ForecastResponse["list"],
 ): Array<ForecastResponse["list"][number]> {
@@ -315,6 +325,7 @@ export function HomePage({ initialData }: HomePageProps) {
 
   const { state, searchWeather } = useWeather(initialData, { onSuccess });
 
+  // One-time: push SSR weather into context so Navbar/background see the same city as the server.
   useEffect(() => {
     if (initialSync.current || !initialData) return;
     initialSync.current = true;
@@ -325,13 +336,14 @@ export function HomePage({ initialData }: HomePageProps) {
     );
   }, [initialData, setCity, setCoordinates, setCurrentWeather]);
 
+  // Navbar (and direct links) set `?city=`; re-run search on client so loading state and errors work consistently.
   useEffect(() => {
     const cityFromQuery = searchParams.get("city");
     if (!cityFromQuery?.trim()) return;
     void searchWeather(cityFromQuery.trim());
   }, [searchParams, searchWeather]);
 
-  /* ── fetch callbacks ── */
+  /* ── fetch callbacks (AI + geo APIs; streaming readers mirror route Content-Type) ── */
 
   const fetchSummary = useCallback(async () => {
     if (state.status !== "ready") return;
@@ -538,7 +550,7 @@ export function HomePage({ initialData }: HomePageProps) {
     }
   }, [state, lastAiCityKey]);
 
-  /* ── derived ── */
+  /* ── derived UI state (icons, local clock from OpenWeather timezone offset) ── */
 
   const weatherKind =
     state.status === "ready"

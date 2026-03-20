@@ -1,3 +1,4 @@
+/** Simple site footer; sits above the fixed background via layout z-index stacking. */
 import { Copyright } from "lucide-react";
 
 export function Footer() {

@@ -1,5 +1,10 @@
 /**
- * Server-only. Streaming AI text generation with fallback chain: Gemini → Groq → OpenRouter.
+ * lib/ai-stream.ts — streaming AI text (SSE / chunked bodies)
+ *
+ * Walkthrough:
+ * - Gemini uses `streamGenerateContent` + SSE lines (`data: {...}`); we re-emit plain UTF-8 chunks.
+ * - Groq/OpenRouter use OpenAI-style SSE with `choices[0].delta.content` — `parseOpenAISSE` normalizes both.
+ * - Consumers (e.g. `/api/ai/summary`) return `Response(stream)` with `text/plain` for progressive UI.
  */
 
 async function tryGeminiStream(
@@ -122,6 +127,7 @@ async function tryOpenRouterStream(
   return parseOpenAISSE(res.body);
 }
 
+/** Transform upstream OpenAI-compatible SSE into a simple byte stream of decoded text deltas. */
 function parseOpenAISSE(
   body: ReadableStream<Uint8Array>,
 ): ReadableStream<Uint8Array> {

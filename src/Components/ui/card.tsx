@@ -1,3 +1,4 @@
+/** Glassmorphism panel primitive — wraps dashboard sections with shared blur + border tokens. */
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 

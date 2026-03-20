@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Compact page control for gallery — builds a window of page numbers with ellipses when `totalPages` is large.
+ */
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type PaginationProps = {

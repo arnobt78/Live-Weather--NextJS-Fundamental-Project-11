@@ -1,3 +1,10 @@
+/**
+ * lib/background.ts — SSR-friendly Unsplash “hero” URL
+ *
+ * Walkthrough:
+ * - `unstable_cache` dedupes Unsplash calls per keyword for 300s (revalidate) — good for cost & rate limits.
+ * - Maps OpenWeather `main` → search query via `WEATHER_UNSPLASH_QUERY`.
+ */
 import { unstable_cache } from "next/cache";
 import { WEATHER_UNSPLASH_QUERY } from "@/data/constants";
 import { searchUnsplash } from "@/lib/unsplash";

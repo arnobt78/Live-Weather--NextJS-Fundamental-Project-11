@@ -1,3 +1,11 @@
+/**
+ * data/constants.ts — shared configuration & static maps
+ *
+ * Walkthrough:
+ * - Cookie key names must stay in sync with `WeatherContext` and `layout.tsx` (SSR reads cookies).
+ * - `WEATHER_*` maps drive local PNGs/GIFs and Unsplash search terms from OpenWeather `main` strings.
+ * - Tweak queries here to change mood of backgrounds without touching components.
+ */
 import type { WeatherKind } from "@/types/weather";
 
 export const DEFAULT_CITY = "Frankfurt";
