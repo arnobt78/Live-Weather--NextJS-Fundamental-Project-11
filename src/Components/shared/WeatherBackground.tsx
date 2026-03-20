@@ -15,11 +15,16 @@ export function WeatherBackground({
   initialImageUrl = null,
 }: WeatherBackgroundProps) {
   const { currentWeather } = useWeatherContext();
-  const weatherKey = currentWeather?.weather[0]?.main ?? "Clear";
-  const keyword = useMemo(
-    () => WEATHER_UNSPLASH_QUERY[weatherKey] ?? "weather nature",
-    [weatherKey],
-  );
+
+  // Only derive a keyword once currentWeather is actually loaded.
+  // Keeping this null while weather is unknown prevents a premature fetch
+  // with the wrong default keyword that would cause a visible blink.
+  const keyword = useMemo(() => {
+    if (!currentWeather) return null;
+    const key = currentWeather.weather[0]?.main ?? "Clear";
+    return WEATHER_UNSPLASH_QUERY[key] ?? "weather nature";
+  }, [currentWeather]);
+
   const [photos, setPhotos] = useState<UnsplashPhoto[]>([]);
   const [index, setIndex] = useState(0);
 
@@ -28,8 +33,11 @@ export function WeatherBackground({
   const [layerB, setLayerB] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<"a" | "b">("a");
   const activeLayerRef = useRef<"a" | "b">("a");
+  // Track the URL currently displayed to avoid re-switching to the same image
+  const displayedUrlRef = useRef<string | null>(initialImageUrl);
 
   useEffect(() => {
+    if (!keyword) return; // wait until weather is known
     let cancelled = false;
     const load = async () => {
       try {
@@ -42,7 +50,7 @@ export function WeatherBackground({
         setPhotos(data.photos ?? []);
         setIndex(0);
       } catch {
-        // Keep fallback gradients only when image fetch fails.
+        // Keep current image on fetch failure.
       }
     };
     void load();
@@ -63,9 +71,14 @@ export function WeatherBackground({
 
   useEffect(() => {
     if (!activeUrl) return;
+    // Skip if already displaying this exact URL — avoids unnecessary crossfade
+    if (displayedUrlRef.current === activeUrl) return;
+    let cancelled = false;
     const img = new window.Image();
     img.src = activeUrl;
     img.onload = () => {
+      if (cancelled) return;
+      displayedUrlRef.current = activeUrl;
       // Load new image into the inactive layer, then flip active
       if (activeLayerRef.current === "a") {
         setLayerB(activeUrl);
@@ -82,6 +95,9 @@ export function WeatherBackground({
       } catch {
         // ignore
       }
+    };
+    return () => {
+      cancelled = true;
     };
   }, [activeUrl]);
 

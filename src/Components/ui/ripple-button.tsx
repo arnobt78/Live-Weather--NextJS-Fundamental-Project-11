@@ -53,7 +53,7 @@ export function RippleButton({
   return (
     <button
       className={cn(
-        "relative overflow-hidden rounded-lg border border-white/25 bg-white/10 text-white shadow-[0_15px_35px_rgba(59,130,246,0.32)] backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-sky-300/50",
+        "relative inline-flex items-center justify-center overflow-hidden rounded-lg border border-white/25 bg-white/10 text-white shadow-[0_15px_35px_rgba(59,130,246,0.32)] backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-sky-300/50",
         className,
       )}
       onClick={handleClick}

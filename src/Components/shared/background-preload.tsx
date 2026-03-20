@@ -7,13 +7,5 @@ type BackgroundPreloadProps = {
  */
 export function BackgroundPreload({ imageUrl }: BackgroundPreloadProps) {
   if (!imageUrl) return null;
-  return (
-    <link
-      rel="preload"
-      as="image"
-      href={imageUrl}
-      fetchPriority="high"
-      crossOrigin="anonymous"
-    />
-  );
+  return <link rel="preload" as="image" href={imageUrl} fetchPriority="high" />;
 }

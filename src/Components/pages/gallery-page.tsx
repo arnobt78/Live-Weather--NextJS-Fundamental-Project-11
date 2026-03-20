@@ -43,14 +43,16 @@ export function GalleryPage() {
       transition={{ duration: 0.4 }}
       className="space-y-6"
     >
-      <h1 className="inline-flex items-center gap-2 font-display text-2xl font-bold text-white">
-        <ImageIcon className="h-6 w-6" />
-        Weather gallery
-      </h1>
-      <p className="inline-flex items-center gap-1 text-white">
-        <Sparkles className="h-4 w-4" />
-        Photos for “{keyword.replace("+", " ")}” from Unsplash.
-      </p>
+      <div className="flex flex-col items-start bg-gray-900/30 p-4 rounded-[28px] border border-white/20">
+        <h1 className="inline-flex items-center gap-2 font-display text-2xl font-bold text-white">
+          <ImageIcon className="h-6 w-6" />
+          Weather gallery
+        </h1>
+        <p className="inline-flex items-center gap-1 text-white">
+          <Sparkles className="h-4 w-4" />
+          Photos for “{keyword.replace("+", " ")}” from Unsplash.
+        </p>
+      </div>
       {loading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
