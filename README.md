@@ -42,7 +42,8 @@ An **educational, full-stack style** weather application that goes beyond a simp
 - How a **Next.js 16** app uses the **App Router** (`app/`), **Server Components** for initial data (e.g. home weather + SEO), and **Client Components** (`"use client"`) for interactivity.
 - How to call **external REST APIs** safely: **server-only** keys in **Route Handlers** (`app/api/.../route.ts`), not exposed to the browser.
 - How **React Context** can hold city, coordinates, saved cities, and current weather for the whole UI.
-- How **Tailwind CSS** + small **UI primitives** (Card, Button, Input) keep styling consistent.
+- How **Tailwind CSS** + small **UI primitives** (Card, Button, Input, **SafeImage**) keep styling consistent.
+- How **`SafeImage`** wraps **`next/image`** and falls back to a native **`<img>`** if optimization fails (e.g. Vercel Image Optimization **402**), so remote photos still load.
 - How **Framer Motion** adds enter/exit animations without blocking data logic.
 - Optional: **AI fallbacks** (Gemini → Groq → OpenRouter) and **Unsplash** for imagery.
 
@@ -61,6 +62,7 @@ An **educational, full-stack style** weather application that goes beyond a simp
 | **TTS (optional)**  | `/api/ai/tts` can turn text to speech when configured (see env).                                                  |
 | **Backgrounds**     | `WeatherBackground` + SSR/cookie-aware preload; Unsplash when `UNSPLASH_ACCESS_KEY` is set.                       |
 | **Gallery**         | `/gallery` — browse Unsplash photos by weather-related keyword.                                                   |
+| **Remote images**   | **`SafeImage`** (`Components/ui/safe-image.tsx`) — uses **`next/image`** first; on error switches to unoptimized **`<img>`** (home icons + gallery grid). |
 | **Persistence**     | City + saved cities + background URL synced via **cookies** (SSR-friendly) and **localStorage** where applicable. |
 | **SEO**             | Rich `metadata` in `src/app/layout.tsx` (title, description, Open Graph, author).                                 |
 
@@ -77,7 +79,7 @@ An **educational, full-stack style** weather application that goes beyond a simp
 | **Animation**    | [Framer Motion](https://www.framer.com/motion/) | `motion.div`, presence, staggered lists.                            |
 | **Icons**        | [Lucide React](https://lucide.dev/)             | Consistent SVG icons.                                               |
 | **Weather data** | [OpenWeather](https://openweathermap.org/)      | Current weather, geocoding, forecast, air pollution.                |
-| **Images**       | [Unsplash API](https://unsplash.com/developers) | Optional background/gallery photos.                                 |
+| **Images**       | [Unsplash API](https://unsplash.com/developers) + `next/image` | Optional backgrounds/gallery; **`SafeImage`** adds **`<img>`** fallback if the optimizer fails. |
 | **AI**           | Gemini / Groq / OpenRouter (optional)           | Text generation behind server routes.                               |
 | **Lint**         | ESLint + `eslint-config-next`                   | `npm run lint`.                                                     |
 
@@ -119,7 +121,7 @@ weather-farming/
 │   ├── Components/
 │   │   ├── pages/             # Large page-level UIs (home-page, gallery-page)
 │   │   ├── shared/            # Navbar, Footer, WeatherBackground, preload helpers
-│   │   └── ui/                # Reusable: Card, Input, Badge, Skeleton, RippleButton, …
+│   │   └── ui/                # Reusable: Card, Input, Badge, Skeleton, RippleButton, SafeImage (next/image + img fallback), …
 │   ├── context/               # WeatherContext — city, lat/lon, saved cities, current weather
 │   ├── hooks/                 # e.g. useWeather — fetch + state for city search flow
 │   ├── lib/                   # openweather, unsplash, ai, background, tts, utils
@@ -172,6 +174,7 @@ These are **server-side** endpoints. They can use **secret** env vars; the brows
 2. **Client hydration**
    - `WeatherProvider` receives initial city/saved list from cookies so **navbar** and **home** don’t fight (hydration-safe).
    - `HomePage` uses `useWeather` + `useSearchParams` to react to `?city=`.
+   - **Images:** `home-page` and `gallery-page` use **`SafeImage`** so Unsplash/OpenWeather URLs still render if **`/_next/image`** returns an error (e.g. quota **402** on Vercel).
 
 3. **After weather is “ready”**
    - `lat`/`lon` from context drive `useEffect` fetches to `/api/forecast` and `/api/air-quality`.
@@ -245,6 +248,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | **`WeatherProvider` + `useWeatherContext`** | Copy pattern for any “global session” state (locale, cart, theme).                                  |
 | **`useWeather` hook**                       | Template for `useCallback` + `useState` + API error/not-found handling.                             |
 | **`Components/ui/*`**                       | Drop `Card`, `Input`, `RippleButton` into another Tailwind app; keep `cn()` from `lib/utils.ts`.    |
+| **`SafeImage`**                             | Copy `safe-image.tsx` anywhere you use **`next/image`** with remote URLs and want a **native `<img>`** fallback on load failure. |
 | **Route handlers**                          | Copy `app/api/forecast/route.ts` pattern: validate query → call server `lib` → `NextResponse.json`. |
 | **`lib/openweather.ts`**                    | Single place for all OpenWeather URLs and typing — extend with one-call API or maps.                |
 | **Metadata object in `layout.tsx`**         | Template for SEO on your next marketing or dashboard site.                                          |
@@ -278,7 +282,7 @@ import { cn } from "@/lib/utils";
 
 ## Keywords
 
-Next.js, React, TypeScript, OpenWeather API, Agro API, weather dashboard, farming advisory, AI weather summary, air quality, AQI, forecast, Unsplash, Tailwind CSS, Framer Motion, App Router, Route Handlers, server components, glassmorphism, Vercel, full-stack learning, Arnob Mahmud
+Next.js, React, TypeScript, OpenWeather API, Agro API, weather dashboard, farming advisory, AI weather summary, air quality, AQI, forecast, Unsplash, next/image, SafeImage, Tailwind CSS, Framer Motion, App Router, Route Handlers, server components, glassmorphism, Vercel, full-stack learning, Arnob Mahmud
 
 ---
 
