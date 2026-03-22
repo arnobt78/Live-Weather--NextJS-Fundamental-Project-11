@@ -37,7 +37,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <main className="mx-auto flex w-full max-w-9xl flex-1 items-stretch">
-      <HomePage initialData={initialData} />
+      <HomePage key={initialCity} initialData={initialData} />
     </main>
   );
 }

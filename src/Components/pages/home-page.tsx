@@ -48,7 +48,7 @@ import {
   Wind,
 } from "lucide-react";
 import { SafeImage } from "@/Components/ui/safe-image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /* ─── types ──────────────────────────────────────────────── */
@@ -210,7 +210,13 @@ const AQI_CONFIG: Record<number, { label: string; color: string; bg: string }> =
   };
 
 const stagger = {
-  container: { hidden: {}, show: { transition: { staggerChildren: 0.08 } } },
+  container: {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.02 },
+    },
+  },
   item: {
     hidden: { opacity: 0, y: 16 },
     show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
@@ -312,6 +318,7 @@ function DashboardSkeleton() {
 /* ─── main component ─────────────────────────────────────── */
 
 export function HomePage({ initialData }: HomePageProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { setCity, setCoordinates, setCurrentWeather, lat, lon, addSavedCity } =
     useWeatherContext();
@@ -617,7 +624,11 @@ export function HomePage({ initialData }: HomePageProps) {
             <div className="cta-shine-wrap mt-4 rounded-lg">
               <RippleButton
                 type="button"
-                onClick={() => void searchWeather(DEFAULT_CITY)}
+                onClick={() => {
+                  router.replace(
+                    `/?city=${encodeURIComponent(DEFAULT_CITY)}`,
+                  );
+                }}
                 className="cta-shine-button rounded-lg bg-slate-700 px-4 py-2 text-sm"
               >
                 Load default city
