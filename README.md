@@ -14,7 +14,10 @@ An **educational, full-stack style** weather application that goes beyond a simp
 
 **Live demo:** [https://weather-farming.vercel.app/](https://weather-farming.vercel.app/)
 
----
+![Dashboard Preview 1](https://github.com/user-attachments/assets/4306dff0-40c8-43cd-8630-bab0202b552a)
+![Dashboard Preview 2](https://github.com/user-attachments/assets/bf8775e0-3120-4dee-a324-d8c2e9c7bad4)
+![Dashboard Preview 3](https://github.com/user-attachments/assets/e484358d-cd2d-4a04-8f01-aee0361f092e)
+![Dashboard Preview 4](https://github.com/user-attachments/assets/50e95fbb-3189-4158-88f0-890532fc46c9)
 
 ## Table of contents
 
